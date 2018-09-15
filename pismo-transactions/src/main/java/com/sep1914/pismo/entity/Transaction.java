@@ -83,4 +83,9 @@ public class Transaction {
         this.dueDate = dueDate;
     }
 
+    @PrePersist
+    public void prePersist() {
+        this.eventDate = LocalDate.now();
+    }
+
 }

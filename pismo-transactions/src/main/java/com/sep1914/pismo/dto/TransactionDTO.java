@@ -15,7 +15,7 @@ public class TransactionDTO {
     @JsonProperty(value = "amount", required = true)
     private BigDecimal amount;
 
-    TransactionDTO() {
+    public TransactionDTO() {
 
     }
 

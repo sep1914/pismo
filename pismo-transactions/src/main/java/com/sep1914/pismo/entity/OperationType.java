@@ -1,13 +1,15 @@
 package com.sep1914.pismo.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "OperationTypes")
 public class OperationType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "OperationType_ID")
     private long id;
 
@@ -18,6 +20,12 @@ public class OperationType {
     private int chargeOrder;
 
     public OperationType() {
+    }
+
+    public OperationType(long id, String description, int chargeOrder) {
+        this.id = id;
+        this.description = description;
+        this.chargeOrder = chargeOrder;
     }
 
     public String getDescription() {
