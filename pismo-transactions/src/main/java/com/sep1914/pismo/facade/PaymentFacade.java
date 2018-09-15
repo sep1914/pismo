@@ -1,6 +1,7 @@
 package com.sep1914.pismo.facade;
 
 import com.sep1914.pismo.dto.PaymentDTO;
+import com.sep1914.pismo.entity.OperationTypeEnum;
 import com.sep1914.pismo.entity.PaymentTracking;
 import com.sep1914.pismo.entity.Transaction;
 import com.sep1914.pismo.persistence.OperationTypeRepository;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.sep1914.pismo.entity.OperationTypeEnum.PAYMENT;
 import static java.math.BigDecimal.ZERO;
 
 @Component
@@ -79,7 +81,7 @@ public class PaymentFacade {
         paymentTransaction.setBalance(remainingAmount);
         paymentTransaction.setEventDate(LocalDate.now());
         paymentTransaction.setDueDate(LocalDate.now());
-        paymentTransaction.setOperationType(operationTypeRepository.getOne(4L));
+        paymentTransaction.setOperationType(operationTypeRepository.getOne(PAYMENT.getOperationId()));
         paymentTransaction.setAmount(paymentDTO.getAmount());
         paymentTransaction.setAccountId(paymentDTO.getAccountId());
 
