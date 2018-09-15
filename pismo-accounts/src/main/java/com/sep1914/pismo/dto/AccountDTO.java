@@ -17,6 +17,11 @@ public class AccountDTO {
 
     }
 
+    public AccountDTO(BigDecimal availableCreditLimit, BigDecimal availableWithdrawalLimit) {
+        this.availableCreditLimit = availableCreditLimit;
+        this.availableWithdrawalLimit = availableWithdrawalLimit;
+    }
+
     public AccountDTO(Account account) {
         this.availableCreditLimit = account.getAvailableCreditLimit();
         this.availableWithdrawalLimit = account.getAvailableWithdrawalLimit();

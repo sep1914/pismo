@@ -21,6 +21,11 @@ public class Account {
     public Account() {
     }
 
+    public Account(BigDecimal availableCreditLimit, BigDecimal availableWithdrawalLimit) {
+        this.availableCreditLimit = availableCreditLimit;
+        this.availableWithdrawalLimit = availableWithdrawalLimit;
+    }
+
     public BigDecimal getAvailableCreditLimit() {
         return availableCreditLimit;
     }
