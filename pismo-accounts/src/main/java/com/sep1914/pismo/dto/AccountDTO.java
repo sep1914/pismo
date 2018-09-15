@@ -8,38 +8,43 @@ import java.math.BigDecimal;
 public class AccountDTO {
 
     @JsonProperty(value = "available_credit_limit", required = true)
-    private BigDecimal availableCreditLimit;
+    private AvailableCreditLimitDTO availableCreditLimit;
 
-    @JsonProperty(value = "available_withdrawal_limit", required = true)
-    private BigDecimal availableWithdrawalLimit;
+    @JsonProperty(value = "available_withdraw_limit", required = true)
+    private AvailableWithdrawalLimitDTO availableWithdrawalLimit;
 
-    AccountDTO() {
+    public AccountDTO() {
 
     }
 
-    public AccountDTO(BigDecimal availableCreditLimit, BigDecimal availableWithdrawalLimit) {
+    public AccountDTO(Account account) {
+        this.availableCreditLimit = new AvailableCreditLimitDTO(account.getAvailableCreditLimit());
+        this.availableWithdrawalLimit = new AvailableWithdrawalLimitDTO(account.getAvailableWithdrawalLimit());
+    }
+
+    public AccountDTO(AvailableCreditLimitDTO availableCreditLimit, AvailableWithdrawalLimitDTO availableWithdrawalLimit) {
         this.availableCreditLimit = availableCreditLimit;
         this.availableWithdrawalLimit = availableWithdrawalLimit;
     }
 
-    public AccountDTO(Account account) {
-        this.availableCreditLimit = account.getAvailableCreditLimit();
-        this.availableWithdrawalLimit = account.getAvailableWithdrawalLimit();
+    public AccountDTO(BigDecimal creditLimit, BigDecimal withdrawalLimit) {
+        this.availableCreditLimit = new AvailableCreditLimitDTO(creditLimit);
+        this.availableWithdrawalLimit = new AvailableWithdrawalLimitDTO(withdrawalLimit);
     }
 
-    public BigDecimal getAvailableCreditLimit() {
+    public AvailableCreditLimitDTO getAvailableCreditLimit() {
         return availableCreditLimit;
     }
 
-    public void setAvailableCreditLimit(BigDecimal availableCreditLimit) {
+    public void setAvailableCreditLimit(AvailableCreditLimitDTO availableCreditLimit) {
         this.availableCreditLimit = availableCreditLimit;
     }
 
-    public BigDecimal getAvailableWithdrawalLimit() {
+    public AvailableWithdrawalLimitDTO getAvailableWithdrawalLimit() {
         return availableWithdrawalLimit;
     }
 
-    public void setAvailableWithdrawalLimit(BigDecimal availableWithdrawalLimit) {
+    public void setAvailableWithdrawalLimit(AvailableWithdrawalLimitDTO availableWithdrawalLimit) {
         this.availableWithdrawalLimit = availableWithdrawalLimit;
     }
 

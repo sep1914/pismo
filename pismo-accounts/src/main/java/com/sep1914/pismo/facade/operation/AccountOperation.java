@@ -17,7 +17,7 @@ public class AccountOperation {
 
     private void updateWithdrawalLimit(Account account, AccountDTO accountDTO) {
         BigDecimal newWithdrawalLimit = account.getAvailableWithdrawalLimit()
-                .add(accountDTO.getAvailableWithdrawalLimit());
+                .add(accountDTO.getAvailableWithdrawalLimit().getAmount());
 
         if (newWithdrawalLimit.signum() < 0) {
             throw new InvalidLimitUpdateException();
@@ -28,7 +28,7 @@ public class AccountOperation {
 
     private void updateCreditLimit(Account account, AccountDTO accountDTO) {
         BigDecimal newCreditLimit = account.getAvailableCreditLimit()
-                .add(accountDTO.getAvailableCreditLimit());
+                .add(accountDTO.getAvailableCreditLimit().getAmount());
 
         if (newCreditLimit.signum() < 0) {
             throw new InvalidLimitUpdateException();

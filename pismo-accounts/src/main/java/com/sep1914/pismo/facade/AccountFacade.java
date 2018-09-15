@@ -7,6 +7,7 @@ import com.sep1914.pismo.persistence.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -26,8 +27,12 @@ public class AccountFacade {
         accountRepository.save(account);
     }
 
-    public List<Account> listAll() {
-        return accountRepository.findAll();
+    public List<AccountDTO> listAll() {
+        List<Account> accounts = accountRepository.findAll();
+        List<AccountDTO> accountDTOs = new ArrayList<>(accounts.size());
+
+        accounts.forEach(a -> accountDTOs.add(new AccountDTO(a)));
+        return accountDTOs;
     }
 
 }

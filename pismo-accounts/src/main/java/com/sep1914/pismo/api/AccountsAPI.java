@@ -14,7 +14,7 @@ public class AccountsAPI {
     private AccountFacade accountFacade;
 
     @PatchMapping("/{accountId}")
-    public ResponseEntity<?> updateAccount(@RequestParam long accountId,
+    public ResponseEntity<?> updateAccount(@PathVariable long accountId,
                               @RequestBody AccountDTO accountDTO) {
         accountFacade.updateAccount(accountId, accountDTO);
 

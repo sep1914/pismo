@@ -1,6 +1,8 @@
 package com.sep1914.pismo.facade.operation;
 
 import com.sep1914.pismo.dto.AccountDTO;
+import com.sep1914.pismo.dto.AvailableCreditLimitDTO;
+import com.sep1914.pismo.dto.AvailableWithdrawalLimitDTO;
 import com.sep1914.pismo.entity.Account;
 import com.sep1914.pismo.facade.exception.InvalidLimitUpdateException;
 import org.junit.Before;
@@ -26,7 +28,9 @@ public class AccountOperationTest {
     @Test
     public void testAddNothingToZeroedLimits() {
         Account account = new Account(ZERO, ZERO);
-        AccountDTO accountDTO = new AccountDTO(ZERO, ZERO);
+        AccountDTO accountDTO = new AccountDTO(
+                new AvailableCreditLimitDTO(ZERO),
+                new AvailableWithdrawalLimitDTO(ZERO));
 
         accountOperation.updateLimits(account, accountDTO);
 
@@ -36,7 +40,9 @@ public class AccountOperationTest {
     @Test
     public void testAddNothingToAlreadySetLimits() {
         Account account = new Account(BigDecimal.valueOf(500.0), BigDecimal.valueOf(200.0));
-        AccountDTO accountDTO = new AccountDTO(ZERO, ZERO);
+        AccountDTO accountDTO = new AccountDTO(
+                new AvailableCreditLimitDTO(ZERO),
+                new AvailableWithdrawalLimitDTO(ZERO));
 
         accountOperation.updateLimits(account, accountDTO);
 
@@ -46,7 +52,9 @@ public class AccountOperationTest {
     @Test
     public void testAddToExistingLimits() {
         Account account = new Account(BigDecimal.valueOf(500.0), BigDecimal.valueOf(200.0));
-        AccountDTO accountDTO = new AccountDTO(BigDecimal.valueOf(123.45), BigDecimal.valueOf(432.10));
+        AccountDTO accountDTO = new AccountDTO(
+                new AvailableCreditLimitDTO(BigDecimal.valueOf(123.45)),
+                new AvailableWithdrawalLimitDTO(BigDecimal.valueOf(432.10)));
 
         accountOperation.updateLimits(account, accountDTO);
 
@@ -56,7 +64,9 @@ public class AccountOperationTest {
     @Test
     public void testSubtractOfExistingLimits() {
         Account account = new Account(BigDecimal.valueOf(500.0), BigDecimal.valueOf(900.0));
-        AccountDTO accountDTO = new AccountDTO(BigDecimal.valueOf(-123.45), BigDecimal.valueOf(-432.10));
+        AccountDTO accountDTO = new AccountDTO(
+                new AvailableCreditLimitDTO(BigDecimal.valueOf(-123.45)),
+                new AvailableWithdrawalLimitDTO(BigDecimal.valueOf(-432.10)));
 
         accountOperation.updateLimits(account, accountDTO);
 
@@ -66,7 +76,9 @@ public class AccountOperationTest {
     @Test(expected = InvalidLimitUpdateException.class)
     public void testSubtractOverLimits() {
         Account account = new Account(BigDecimal.valueOf(500.0), BigDecimal.valueOf(300.0));
-        AccountDTO accountDTO = new AccountDTO(BigDecimal.valueOf(-600.00), BigDecimal.valueOf(-100.0));
+        AccountDTO accountDTO = new AccountDTO(
+                new AvailableCreditLimitDTO(BigDecimal.valueOf(-600.00)),
+                new AvailableWithdrawalLimitDTO(BigDecimal.valueOf(-100.0)));
 
         accountOperation.updateLimits(account, accountDTO);
     }

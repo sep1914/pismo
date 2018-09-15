@@ -1,6 +1,8 @@
 package com.sep1914.pismo.facade;
 
 import com.sep1914.pismo.dto.AccountDTO;
+import com.sep1914.pismo.dto.AvailableCreditLimitDTO;
+import com.sep1914.pismo.dto.AvailableWithdrawalLimitDTO;
 import com.sep1914.pismo.entity.Account;
 import com.sep1914.pismo.facade.exception.InvalidLimitUpdateException;
 import com.sep1914.pismo.persistence.AccountRepository;
@@ -40,9 +42,10 @@ public class AccountFacadeTest {
     @Test
     @Transactional
     public void testAddUpdateAccount() {
+        AvailableWithdrawalLimitDTO availableWithdrawalLimitDTO = new AvailableWithdrawalLimitDTO();
         AccountDTO accountDTO = new AccountDTO(
-                BigDecimal.valueOf(200.00).setScale(2),
-                BigDecimal.valueOf(100.00).setScale(2));
+                new AvailableCreditLimitDTO(BigDecimal.valueOf(200.00).setScale(2)),
+                new AvailableWithdrawalLimitDTO(BigDecimal.valueOf(100.00).setScale(2)));
         accountFacade.updateAccount(1L, accountDTO);
 
         assertNewLimitsOnAccount(accountRepository.findById(1L).get(), 300.00, 120.00);
@@ -52,8 +55,8 @@ public class AccountFacadeTest {
     @Transactional
     public void testSubtractUpdateAccount() {
         AccountDTO accountDTO = new AccountDTO(
-                BigDecimal.valueOf(-10.00).setScale(2),
-                BigDecimal.valueOf(-5.00).setScale(2));
+                new AvailableCreditLimitDTO(BigDecimal.valueOf(-10.00).setScale(2)),
+                new AvailableWithdrawalLimitDTO(BigDecimal.valueOf(-5.00).setScale(2)));
         accountFacade.updateAccount(1L, accountDTO);
 
         assertNewLimitsOnAccount(accountRepository.findById(1L).get(), 90.00, 15.00);
@@ -63,19 +66,24 @@ public class AccountFacadeTest {
     @Transactional
     public void testSubtractInvalidUpdateAccount() {
         AccountDTO accountDTO = new AccountDTO(
-                BigDecimal.valueOf(-10000.00),
-                BigDecimal.valueOf(-50000.00));
+                new AvailableCreditLimitDTO(BigDecimal.valueOf(-10000.00)),
+                new AvailableWithdrawalLimitDTO(BigDecimal.valueOf(-50000.00)));
         accountFacade.updateAccount(1L, accountDTO);
     }
 
     @Test
     public void testListAll() {
-        List<Account> accounts = new ArrayList<>(accountFacade.listAll());
+        List<AccountDTO> accounts = new ArrayList<>(accountFacade.listAll());
         assertEquals(creditLimits.length, accounts.size());
 
         for (int i = 0; i < accounts.size(); i++) {
             assertNewLimitsOnAccount(accounts.get(i), creditLimits[i], withdrawalLimits[i]);
         }
+    }
+
+    private void assertNewLimitsOnAccount(AccountDTO account, double credit, double withdrawal) {
+        assertEquals(BigDecimal.valueOf(credit).setScale(2), account.getAvailableCreditLimit().getAmount());
+        assertEquals(BigDecimal.valueOf(withdrawal).setScale(2), account.getAvailableWithdrawalLimit().getAmount());
     }
 
     private void assertNewLimitsOnAccount(Account account, double v, double v2) {
