@@ -1,7 +1,6 @@
 package com.sep1914.pismo.facade;
 
 import com.sep1914.pismo.dto.TransactionDTO;
-import com.sep1914.pismo.entity.OperationType;
 import com.sep1914.pismo.entity.Transaction;
 import com.sep1914.pismo.facade.exception.InvalidOperationTypeException;
 import com.sep1914.pismo.persistence.OperationTypeRepository;
@@ -11,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureTestDatabase
 public class TransactionFacadeTest {
 
     @Autowired
