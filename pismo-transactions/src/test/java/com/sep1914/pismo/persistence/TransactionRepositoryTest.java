@@ -36,7 +36,7 @@ public class TransactionRepositoryTest {
     @Test
     @Transactional
     public void testListByAccountId() {
-        List<Transaction> transactions = transactionRepository.findByAccountId(1L);
+        List<Transaction> transactions = transactionRepository.findNegativeBalanceByAccountId(1L);
 
         assertEquals(3, transactions.size());
         assertEquals(BigDecimal.valueOf(-50.00).setScale(2), transactions.get(0).getBalance());
@@ -47,7 +47,7 @@ public class TransactionRepositoryTest {
     @Test
     @Transactional
     public void testSortByEventDate() {
-        List<Transaction> transactions = transactionRepository.findByAccountId(2L);
+        List<Transaction> transactions = transactionRepository.findNegativeBalanceByAccountId(2L);
 
         assertEquals(3, transactions.size());
         assertEquals(BigDecimal.valueOf(-1.00).setScale(2), transactions.get(0).getBalance());
@@ -58,7 +58,7 @@ public class TransactionRepositoryTest {
     @Test
     @Transactional
     public void testSortByChargeOrder() {
-        List<Transaction> transactions = transactionRepository.findByAccountId(3L);
+        List<Transaction> transactions = transactionRepository.findNegativeBalanceByAccountId(3L);
 
         assertEquals(3, transactions.size());
         assertEquals(BigDecimal.valueOf(-10.00).setScale(2), transactions.get(0).getBalance());
@@ -69,7 +69,7 @@ public class TransactionRepositoryTest {
     @Test
     @Transactional
     public void testSortByBalance() {
-        List<Transaction> transactions = transactionRepository.findByAccountId(4L);
+        List<Transaction> transactions = transactionRepository.findNegativeBalanceByAccountId(4L);
 
         assertEquals(3, transactions.size());
         assertEquals(BigDecimal.valueOf(-300.00).setScale(2), transactions.get(0).getBalance());
