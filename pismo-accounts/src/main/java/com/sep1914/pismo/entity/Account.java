@@ -12,10 +12,10 @@ public class Account {
     @Column(name = "Account_ID")
     private long id;
 
-    @Column(name = "AvailableCreditLimit")
+    @Column(name = "AvailableCreditLimit", scale = 2)
     private BigDecimal availableCreditLimit;
 
-    @Column(name = "AvailableWithdrawalLimit")
+    @Column(name = "AvailableWithdrawalLimit", scale = 2)
     private BigDecimal availableWithdrawalLimit;
 
     public Account() {
