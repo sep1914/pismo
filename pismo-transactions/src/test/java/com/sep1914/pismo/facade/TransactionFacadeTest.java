@@ -55,7 +55,7 @@ public class TransactionFacadeTest {
 
         transactionFacade.addTransaction(transactionDTO);
 
-        Transaction transaction = transactionRepository.findById(1L).get();
+        Transaction transaction = transactionRepository.findAll().get(0);
         assertTransactionAttributes(transaction);
     }
 

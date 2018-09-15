@@ -29,7 +29,7 @@ public class Transaction {
     @Column(name = "EventDate", nullable = false)
     private LocalDate eventDate;
 
-    @Column(name = "DueDate", nullable = false)
+    @Column(name = "DueDate")
     private LocalDate dueDate;
 
     public Transaction() {

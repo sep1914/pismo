@@ -1,7 +1,6 @@
 package com.sep1914.pismo.facade;
 
 import com.sep1914.pismo.dto.PaymentDTO;
-import com.sep1914.pismo.entity.OperationTypeEnum;
 import com.sep1914.pismo.entity.PaymentTracking;
 import com.sep1914.pismo.entity.Transaction;
 import com.sep1914.pismo.persistence.OperationTypeRepository;
@@ -34,28 +33,17 @@ public class PaymentFacade {
     @Transactional
     public void addPayments(PaymentDTO[] paymentDTOs) {
         for (PaymentDTO paymentDTO : paymentDTOs) {
-            PaymentAddResult paymentAddResult = addPayment(paymentDTO);
+            List<Transaction> transactions = transactionRepository
+                    .findNegativeBalanceByAccountId(paymentDTO.getAccountId());
+            PaymentAddResult paymentAddResult = addPayment(paymentDTO, transactions);
 
             final Transaction paymentTransaction = savePaymentTransaction(paymentAddResult);
             savePaymentTrackings(paymentAddResult, paymentTransaction);
         }
     }
 
-    private void savePaymentTrackings(PaymentAddResult paymentAddResult, Transaction transaction) {
-        paymentAddResult.getPaymentTrackings().forEach(t -> {
-            t.setCreditTransaction(transaction);
-            paymentTrackingRepository.save(t);
-        });
-    }
-
-    private Transaction savePaymentTransaction(PaymentAddResult paymentAddResult) {
-        return transactionRepository.save(paymentAddResult.getPaymentTransaction());
-    }
-
-    PaymentAddResult addPayment(PaymentDTO paymentDTO) {
-        List<Transaction> transactions = transactionRepository.findNegativeBalanceByAccountId(paymentDTO.getAccountId());
+    PaymentAddResult addPayment(PaymentDTO paymentDTO, List<Transaction> transactions) {
         List<PaymentTracking> trackings = new LinkedList<>();
-
         BigDecimal remainingAmount = paymentDTO.getAmount();
 
         for (Transaction transaction : transactions) {
@@ -75,6 +63,17 @@ public class PaymentFacade {
         return new PaymentAddResult(trackings, paymentTransaction);
     }
 
+    private void savePaymentTrackings(PaymentAddResult paymentAddResult, Transaction transaction) {
+        paymentAddResult.getPaymentTrackings().forEach(t -> {
+            t.setCreditTransaction(transaction);
+            paymentTrackingRepository.save(t);
+        });
+    }
+
+    private Transaction savePaymentTransaction(PaymentAddResult paymentAddResult) {
+        return transactionRepository.save(paymentAddResult.getPaymentTransaction());
+    }
+
     private Transaction createPaymentTransaction(PaymentDTO paymentDTO, BigDecimal remainingAmount) {
         Transaction paymentTransaction = new Transaction();
 
@@ -92,6 +91,7 @@ public class PaymentFacade {
         PaymentTracking paymentTracking = new PaymentTracking();
         paymentTracking.setDebitTransaction(transaction);
         paymentTracking.setAmount(balanceAdjust);
+
         trackings.add(paymentTracking);
     }
 

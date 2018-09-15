@@ -9,7 +9,7 @@ import com.sep1914.pismo.persistence.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.time.LocalDate;
 
 @Component
 public class TransactionFacade {
@@ -29,6 +29,7 @@ public class TransactionFacade {
         transaction.setAmount(transactionDTO.getAmount());
         transaction.setBalance(transactionDTO.getAmount());
         transaction.setOperationType(operationType);
+        transaction.setEventDate(LocalDate.now());
 
         transactionRepository.save(transaction);
     }
