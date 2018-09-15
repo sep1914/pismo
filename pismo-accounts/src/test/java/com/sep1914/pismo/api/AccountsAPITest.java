@@ -55,6 +55,8 @@ public class AccountsAPITest {
                         "\"available_withdrawal_limit\" : { \"amount\": 432.10 }" +
                         "}"))
                 .andExpect(status().isAccepted());
+
+        verify(accountFacade, times(1)).updateAccount(eq(123L), any());
     }
 
     @Test
@@ -68,6 +70,8 @@ public class AccountsAPITest {
                         "\"available_withdrawal_limit\" : { \"amount\": -500.00 }" +
                         "}"))
                 .andExpect(status().isBadRequest());
+
+        verify(accountFacade, times(1)).updateAccount(eq(42L), any());
     }
 
     @Test
@@ -79,6 +83,7 @@ public class AccountsAPITest {
 
         assertDTOLimits(accountDTOs.get(0), 100.00, 200.00);
         assertDTOLimits(accountDTOs.get(1), 300.00, 400.00);
+        verify(accountFacade, times(1)).listAll();
     }
 
     private void assertDTOLimits(AccountDTO accountDTO, double v, double v2) {
