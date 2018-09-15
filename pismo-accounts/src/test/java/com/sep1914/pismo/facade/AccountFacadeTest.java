@@ -41,8 +41,18 @@ public class AccountFacadeTest {
 
     @Test
     @Transactional
+    public void testUpdateNewAccount() {
+        AccountDTO accountDTO = new AccountDTO(
+                new AvailableCreditLimitDTO(BigDecimal.valueOf(200.00).setScale(2)),
+                new AvailableWithdrawalLimitDTO(BigDecimal.valueOf(100.00).setScale(2)));
+        accountFacade.updateAccount(999L, accountDTO);
+
+        assertNewLimitsOnAccount(accountRepository.findById(999L).get(), 200.00, 100.00);
+    }
+
+    @Test
+    @Transactional
     public void testAddUpdateAccount() {
-        AvailableWithdrawalLimitDTO availableWithdrawalLimitDTO = new AvailableWithdrawalLimitDTO();
         AccountDTO accountDTO = new AccountDTO(
                 new AvailableCreditLimitDTO(BigDecimal.valueOf(200.00).setScale(2)),
                 new AvailableWithdrawalLimitDTO(BigDecimal.valueOf(100.00).setScale(2)));
@@ -96,6 +106,7 @@ public class AccountFacadeTest {
             Account account = new Account(
                     BigDecimal.valueOf(creditLimits[i]),
                     BigDecimal.valueOf(withdrawalLimits[i]));
+            account.setId(i + 1);
 
             accountRepository.save(account);
         }

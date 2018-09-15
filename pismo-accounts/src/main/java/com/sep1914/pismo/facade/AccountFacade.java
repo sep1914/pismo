@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.math.BigDecimal.ZERO;
+
 @Component
 public class AccountFacade {
 
@@ -20,8 +22,10 @@ public class AccountFacade {
     private AccountOperation accountOperation;
 
     public void updateAccount(long accountId, AccountDTO accountDTO) {
-        Account account = accountRepository.findById(accountId)
-                .orElse(new Account());
+        Account newAccount = new Account(ZERO, ZERO);
+        newAccount.setId(accountId);
+
+        Account account = accountRepository.findById(accountId).orElse(newAccount);
 
         accountOperation.updateLimits(account, accountDTO);
         accountRepository.save(account);

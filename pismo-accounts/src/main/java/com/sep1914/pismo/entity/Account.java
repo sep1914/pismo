@@ -1,6 +1,9 @@
 package com.sep1914.pismo.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
@@ -8,7 +11,6 @@ import java.math.BigDecimal;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Account_ID")
     private long id;
 
@@ -42,4 +44,7 @@ public class Account {
         this.availableWithdrawalLimit = availableWithdrawalLimit;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 }
