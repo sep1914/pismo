@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 
 public class AccountDTO {
 
+    @JsonProperty(value = "account_id")
+    private Long accountId;
+
     @JsonProperty(value = "available_credit_limit", required = true)
     private AvailableCreditLimitDTO availableCreditLimit;
 
@@ -18,6 +21,7 @@ public class AccountDTO {
     }
 
     public AccountDTO(Account account) {
+        this.accountId = account.getId();
         this.availableCreditLimit = new AvailableCreditLimitDTO(account.getAvailableCreditLimit());
         this.availableWithdrawalLimit = new AvailableWithdrawalLimitDTO(account.getAvailableWithdrawalLimit());
     }
@@ -46,6 +50,14 @@ public class AccountDTO {
 
     public void setAvailableWithdrawalLimit(AvailableWithdrawalLimitDTO availableWithdrawalLimit) {
         this.availableWithdrawalLimit = availableWithdrawalLimit;
+    }
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
 }
