@@ -36,4 +36,7 @@ public class OperationType {
         this.chargeOrder = chargeOrder;
     }
 
+    public long getId() {
+        return id;
+    }
 }
