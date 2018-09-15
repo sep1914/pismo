@@ -1,6 +1,7 @@
 package com.sep1914.pismo.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "PaymentsTracking")
@@ -18,6 +19,9 @@ public class PaymentTracking {
     @ManyToOne
     @JoinColumn(name = "DebitTransaction_ID")
     private Transaction debitTransaction;
+
+    @Column(name = "Amount", nullable = false)
+    private BigDecimal amount;
 
     public PaymentTracking() {
     }
@@ -38,4 +42,11 @@ public class PaymentTracking {
         this.debitTransaction = debitTransaction;
     }
 
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
 }
