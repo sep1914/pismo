@@ -1,12 +1,15 @@
 package com.sep1914.pismo.facade;
 
+import com.sep1914.pismo.dto.AccountDTO;
 import com.sep1914.pismo.dto.PaymentDTO;
 import com.sep1914.pismo.entity.PaymentTracking;
 import com.sep1914.pismo.entity.Transaction;
+import com.sep1914.pismo.facade.notifier.AccountNotifier;
 import com.sep1914.pismo.persistence.OperationTypeRepository;
 import com.sep1914.pismo.persistence.PaymentTrackingRepository;
 import com.sep1914.pismo.persistence.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -30,6 +33,10 @@ public class PaymentFacade {
     @Autowired
     private PaymentTrackingRepository paymentTrackingRepository;
 
+    @Autowired
+    @Qualifier("rest-notifier")
+    private AccountNotifier accountNotifier;
+
     @Transactional
     public void addPayments(PaymentDTO[] paymentDTOs) {
         for (PaymentDTO paymentDTO : paymentDTOs) {
@@ -39,6 +46,7 @@ public class PaymentFacade {
 
             final Transaction paymentTransaction = savePaymentTransaction(paymentAddResult);
             savePaymentTrackings(paymentAddResult, paymentTransaction);
+            notifyAccounts(paymentAddResult, paymentDTO);
         }
     }
 
@@ -58,9 +66,18 @@ public class PaymentFacade {
             addPaymentTracking(trackings, transaction, balanceAdjust);
         }
 
+        BigDecimal limitIncrease = paymentDTO.getAmount().subtract(remainingAmount);
         Transaction paymentTransaction = createPaymentTransaction(paymentDTO, remainingAmount);
 
-        return new PaymentAddResult(trackings, paymentTransaction);
+        return new PaymentAddResult(trackings, paymentTransaction, limitIncrease);
+    }
+
+    private void notifyAccounts(PaymentAddResult paymentAddResult, PaymentDTO paymentDTO) {
+        AccountDTO accountDTO =
+                new AccountDTO(paymentAddResult.getLimitIncreaseAmount(),
+                        paymentAddResult.getLimitIncreaseAmount());
+
+        accountNotifier.notifyAccounts(accountDTO, paymentDTO.getAccountId());
     }
 
     private void savePaymentTrackings(PaymentAddResult paymentAddResult, Transaction transaction) {
