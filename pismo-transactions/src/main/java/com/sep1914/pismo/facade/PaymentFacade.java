@@ -43,7 +43,7 @@ public class PaymentFacade {
         BigDecimal remainingAmount = paymentDTO.getAmount();
 
         for (Transaction transaction : transactions) {
-            if (remainingAmount.equals(ZERO)) {
+            if (remainingAmount.equals(ZERO.setScale(2))) {
                 break;
             }
 
