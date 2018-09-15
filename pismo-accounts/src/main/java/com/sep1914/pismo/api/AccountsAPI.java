@@ -1,24 +1,29 @@
 package com.sep1914.pismo.api;
 
 import com.sep1914.pismo.dto.AccountDTO;
+import com.sep1914.pismo.facade.AccountFacade;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/accounts")
 public class AccountsAPI {
 
-    @PatchMapping("/{accountId}")
-    public void updateAccount(@RequestParam long accountId,
-                              @RequestBody AccountDTO accountDTO) {
+    @Autowired
+    private AccountFacade accountFacade;
 
+    @PatchMapping("/{accountId}")
+    public ResponseEntity<?> updateAccount(@RequestParam long accountId,
+                              @RequestBody AccountDTO accountDTO) {
+        accountFacade.updateAccount(accountId, accountDTO);
+
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping("/limits")
-    public List<AccountDTO> listAccounts() {
-        return Collections.emptyList();
+    public ResponseEntity<?> listAccounts() {
+        return ResponseEntity.ok(accountFacade.listAll());
     }
 
 }

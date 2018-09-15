@@ -7,10 +7,10 @@ import java.math.BigDecimal;
 
 public class AccountDTO {
 
-    @JsonProperty("available_credit_limit")
+    @JsonProperty(value = "available_credit_limit", required = true)
     private BigDecimal availableCreditLimit;
 
-    @JsonProperty("available_withdrawal_limit")
+    @JsonProperty(value = "available_withdrawal_limit", required = true)
     private BigDecimal availableWithdrawalLimit;
 
     AccountDTO() {
