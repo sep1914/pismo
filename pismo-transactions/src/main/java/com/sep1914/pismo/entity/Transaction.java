@@ -16,6 +16,7 @@ public class Transaction {
     @Column(name = "Account_ID")
     private long accountId;
 
+    @ManyToOne
     @JoinColumn(name = "OperationType_ID", nullable = false)
     private OperationType operationType;
 

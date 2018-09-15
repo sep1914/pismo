@@ -11,9 +11,11 @@ public class PaymentTracking {
     @Column(name = "PaymentTracking_ID")
     private long id;
 
+    @ManyToOne
     @JoinColumn(name = "CreditTransaction_ID")
     private Transaction creditTransaction;
 
+    @ManyToOne
     @JoinColumn(name = "DebitTransaction_ID")
     private Transaction debitTransaction;
 
