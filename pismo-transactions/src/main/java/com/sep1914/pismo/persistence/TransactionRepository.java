@@ -10,7 +10,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query("select t from Transaction t " +
             "where accountId = ?1 and balance < 0 " +
-            "order by t.operationType.chargeOrder asc, balance desc")
+            "order by t.operationType.chargeOrder asc, eventDate asc, balance asc")
     public List<Transaction> findByAccountId(long accountId);
 
 }
