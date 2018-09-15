@@ -6,6 +6,7 @@ import com.sep1914.pismo.entity.Transaction;
 import com.sep1914.pismo.facade.exception.InvalidOperationTypeException;
 import com.sep1914.pismo.persistence.OperationTypeRepository;
 import com.sep1914.pismo.persistence.TransactionRepository;
+import com.sep1914.pismo.util.OperationTypeTestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ public class TransactionFacadeTest {
 
     @Before
     public void before() {
-        initializeOperationTypes();
+        OperationTypeTestUtil.initializeOperationTypes(operationTypeRepository);
     }
 
     @Test(expected = InvalidOperationTypeException.class)
@@ -65,11 +66,5 @@ public class TransactionFacadeTest {
         assertEquals(LocalDate.now(), transaction.getEventDate());
     }
 
-    private void initializeOperationTypes() {
-        operationTypeRepository.save(new OperationType(1, "COMPRA A VISTA", 2));
-        operationTypeRepository.save(new OperationType(2, "COMPRA PARCELADA", 1));
-        operationTypeRepository.save(new OperationType(3, "SAQUE", 0));
-        operationTypeRepository.save(new OperationType(4, "PAGAMENTO", 0));
-    }
 
 }

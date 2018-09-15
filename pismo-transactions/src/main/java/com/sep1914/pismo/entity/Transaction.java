@@ -20,10 +20,10 @@ public class Transaction {
     @JoinColumn(name = "OperationType_ID", nullable = false)
     private OperationType operationType;
 
-    @Column(name = "Amount", nullable = false)
+    @Column(name = "Amount", nullable = false, scale = 2)
     private BigDecimal amount;
 
-    @Column(name = "Balance", nullable = false)
+    @Column(name = "Balance", nullable = false, scale = 2)
     private BigDecimal balance;
 
     @Column(name = "EventDate", nullable = false)
