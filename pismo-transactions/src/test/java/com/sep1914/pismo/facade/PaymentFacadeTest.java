@@ -52,7 +52,7 @@ public class PaymentFacadeTest {
         PaymentDTO paymentDTO = new PaymentDTO(1L, BigDecimal.valueOf(10.00).setScale(2));
         addTransaction(1L, 1L, BigDecimal.valueOf(-20.00).setScale(2), LocalDate.of(2018, 8, 1));
 
-        paymentFacade.addPayment(paymentDTO);
+        paymentFacade.addPayments(new PaymentDTO[] {paymentDTO});
 
         List<Transaction> transactions = transactionRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
         Transaction originalTransaction = transactions.get(0);
@@ -68,7 +68,7 @@ public class PaymentFacadeTest {
         PaymentDTO paymentDTO = new PaymentDTO(1L, BigDecimal.valueOf(100.00).setScale(2));
         addTransaction(1L, 1L, BigDecimal.valueOf(-20.00).setScale(2), LocalDate.of(2018, 8, 1));
 
-        paymentFacade.addPayment(paymentDTO);
+        paymentFacade.addPayments(new PaymentDTO[] {paymentDTO});
 
         List<Transaction> transactions = transactionRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
         Transaction originalTransaction = transactions.get(0);
@@ -84,7 +84,7 @@ public class PaymentFacadeTest {
         PaymentDTO paymentDTO = new PaymentDTO(1L, BigDecimal.valueOf(100.00).setScale(2));
         addTransaction(1L, 1L, BigDecimal.valueOf(-100.00).setScale(2), LocalDate.of(2018, 8, 1));
 
-        paymentFacade.addPayment(paymentDTO);
+        paymentFacade.addPayments(new PaymentDTO[] {paymentDTO});
 
         List<Transaction> transactions = transactionRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
         Transaction originalTransaction = transactions.get(0);
@@ -102,7 +102,7 @@ public class PaymentFacadeTest {
         addTransaction(1L, 1L, BigDecimal.valueOf(-23.50).setScale(2), LocalDate.of(2017, 4, 10));
         addTransaction(1L, 1L, BigDecimal.valueOf(-18.70).setScale(2), LocalDate.of(2017, 4, 30));
 
-        paymentFacade.addPayment(paymentDTO);
+        paymentFacade.addPayments(new PaymentDTO[] {paymentDTO});
 
         assertBalancesAreCorrect();
         assertTrackingsAreCorrect();

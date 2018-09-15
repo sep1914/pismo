@@ -32,11 +32,25 @@ public class PaymentFacade {
     @Transactional
     public void addPayments(PaymentDTO[] paymentDTOs) {
         for (PaymentDTO paymentDTO : paymentDTOs) {
-            addPayment(paymentDTO);
+            PaymentAddResult paymentAddResult = addPayment(paymentDTO);
+
+            final Transaction paymentTransaction = savePaymentTransaction(paymentAddResult);
+            savePaymentTrackings(paymentAddResult, paymentTransaction);
         }
     }
 
-    void addPayment(PaymentDTO paymentDTO) {
+    private void savePaymentTrackings(PaymentAddResult paymentAddResult, Transaction transaction) {
+        paymentAddResult.getPaymentTrackings().forEach(t -> {
+            t.setCreditTransaction(transaction);
+            paymentTrackingRepository.save(t);
+        });
+    }
+
+    private Transaction savePaymentTransaction(PaymentAddResult paymentAddResult) {
+        return transactionRepository.save(paymentAddResult.getPaymentTransaction());
+    }
+
+    PaymentAddResult addPayment(PaymentDTO paymentDTO) {
         List<Transaction> transactions = transactionRepository.findNegativeBalanceByAccountId(paymentDTO.getAccountId());
         List<PaymentTracking> trackings = new LinkedList<>();
 
@@ -51,13 +65,17 @@ public class PaymentFacade {
             transaction.setBalance(transaction.getBalance().add(balanceAdjust));
             remainingAmount = remainingAmount.subtract(balanceAdjust);
 
-            PaymentTracking paymentTracking = new PaymentTracking();
-            paymentTracking.setDebitTransaction(transaction);
-            paymentTracking.setAmount(balanceAdjust);
-            trackings.add(paymentTracking);
+            addPaymentTracking(trackings, transaction, balanceAdjust);
         }
 
+        Transaction paymentTransaction = createPaymentTransaction(paymentDTO, remainingAmount);
+
+        return new PaymentAddResult(trackings, paymentTransaction);
+    }
+
+    private Transaction createPaymentTransaction(PaymentDTO paymentDTO, BigDecimal remainingAmount) {
         Transaction paymentTransaction = new Transaction();
+
         paymentTransaction.setBalance(remainingAmount);
         paymentTransaction.setEventDate(LocalDate.now());
         paymentTransaction.setDueDate(LocalDate.now());
@@ -65,12 +83,14 @@ public class PaymentFacade {
         paymentTransaction.setAmount(paymentDTO.getAmount());
         paymentTransaction.setAccountId(paymentDTO.getAccountId());
 
-        final Transaction managedPaymentTransaction = transactionRepository.save(paymentTransaction);
+        return paymentTransaction;
+    }
 
-        trackings.forEach(t -> {
-            t.setCreditTransaction(managedPaymentTransaction);
-            paymentTrackingRepository.save(t);
-        });
+    private void addPaymentTracking(List<PaymentTracking> trackings, Transaction transaction, BigDecimal balanceAdjust) {
+        PaymentTracking paymentTracking = new PaymentTracking();
+        paymentTracking.setDebitTransaction(transaction);
+        paymentTracking.setAmount(balanceAdjust);
+        trackings.add(paymentTracking);
     }
 
     BigDecimal min(BigDecimal one, BigDecimal another) {
