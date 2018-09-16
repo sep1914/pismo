@@ -1,0 +1,51 @@
+version: '3'
+services:
+  pismo-accounts:
+    build:
+      context: pismo-accounts
+    environment:
+      DDL_AUTO: create
+      JDBC_URL: jdbc:mysql://mysql-accounts:3306/pismo-accounts
+      JDBC_DRIVER: com.mysql.jdbc.Driver
+      DATASOURCE_USERNAME: pismo-accounts
+      DATASOURCE_PASSWORD: accounts
+    ports:
+      - "9090:9090"
+    depends_on:
+      - mysql-accounts
+    links:
+      - mysql-accounts
+  pismo-transactions:
+    build:
+      context: pismo-transactions
+    environment:
+      DDL_AUTO: create
+      JDBC_URL: jdbc:mysql://mysql-transactions:3306/pismo-transactions
+      JDBC_DRIVER: com.mysql.jdbc.Driver
+      DATASOURCE_USERNAME: pismo-transactions
+      DATASOURCE_PASSWORD: transactions
+      ACCOUNTS_API_URL: http://pismo-accounts:9090/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-transactions
+    links:
+      - mysql-transactions
+  mysql-accounts:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: froot
+      MYSQL_DATABASE: pismo-accounts
+      MYSQL_USER: pismo-accounts
+      MYSQL_PASSWORD: accounts
+    ports:
+      - "3306:3306"
+  mysql-transactions:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: froot
+      MYSQL_DATABASE: pismo-transactions
+      MYSQL_USER: pismo-transactions
+      MYSQL_PASSWORD: transactions
+    ports:
+      - "3307:3306"
