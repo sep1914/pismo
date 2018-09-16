@@ -53,4 +53,13 @@ public class AccountDTO {
         this.accountId = accountId;
     }
 
+    @Override
+    public String toString() {
+        return "AccountDTO{" +
+                "accountId=" + accountId +
+                ", availableCreditLimit=" + availableCreditLimit +
+                ", availableWithdrawalLimit=" + availableWithdrawalLimit +
+                '}';
+    }
+
 }

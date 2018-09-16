@@ -49,4 +49,13 @@ public class TransactionDTO {
         this.amount = amount;
     }
 
+    @Override
+    public String toString() {
+        return "TransactionDTO{" +
+                "accountId=" + accountId +
+                ", operationTypeId=" + operationTypeId +
+                ", amount=" + amount +
+                '}';
+    }
+
 }

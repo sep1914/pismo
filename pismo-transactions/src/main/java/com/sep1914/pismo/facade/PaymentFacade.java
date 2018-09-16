@@ -8,6 +8,8 @@ import com.sep1914.pismo.facade.notifier.AccountNotifier;
 import com.sep1914.pismo.persistence.OperationTypeRepository;
 import com.sep1914.pismo.persistence.PaymentTrackingRepository;
 import com.sep1914.pismo.persistence.TransactionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -37,9 +39,13 @@ public class PaymentFacade {
     @Qualifier("rest-notifier")
     private AccountNotifier accountNotifier;
 
+    private final Logger LOGGER = LoggerFactory.getLogger(PaymentFacade.class);
+
     @Transactional
     public void addPayments(PaymentDTO[] paymentDTOs) {
         for (PaymentDTO paymentDTO : paymentDTOs) {
+            LOGGER.info("Adding payment {}", paymentDTO);
+
             List<Transaction> transactions = transactionRepository
                     .findNegativeBalanceByAccountId(paymentDTO.getAccountId());
             PaymentAddResult paymentAddResult = addPayment(paymentDTO, transactions);
@@ -73,6 +79,8 @@ public class PaymentFacade {
     }
 
     private void notifyAccounts(PaymentAddResult paymentAddResult, PaymentDTO paymentDTO) {
+        LOGGER.info("Notifying Account API of {}", paymentDTO);
+
         AccountDTO accountDTO =
                 new AccountDTO(paymentAddResult.getLimitIncreaseAmount(),
                         paymentAddResult.getLimitIncreaseAmount());
@@ -82,12 +90,16 @@ public class PaymentFacade {
 
     private void savePaymentTrackings(PaymentAddResult paymentAddResult, Transaction transaction) {
         paymentAddResult.getPaymentTrackings().forEach(t -> {
+            LOGGER.info("Saving payment tracking");
+
             t.setCreditTransaction(transaction);
             paymentTrackingRepository.save(t);
         });
     }
 
     private Transaction savePaymentTransaction(PaymentAddResult paymentAddResult) {
+        LOGGER.info("Saving transaction");
+
         return transactionRepository.save(paymentAddResult.getPaymentTransaction());
     }
 
