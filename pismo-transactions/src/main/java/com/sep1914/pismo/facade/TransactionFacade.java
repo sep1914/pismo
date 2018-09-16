@@ -26,8 +26,8 @@ public class TransactionFacade {
 
         Transaction transaction = new Transaction();
         transaction.setAccountId(transactionDTO.getAccountId());
-        transaction.setAmount(transactionDTO.getAmount());
-        transaction.setBalance(transactionDTO.getAmount());
+        transaction.setAmount(transactionDTO.getAmount().negate());
+        transaction.setBalance(transactionDTO.getAmount().negate());
         transaction.setOperationType(operationType);
         transaction.setEventDate(LocalDate.now());
 

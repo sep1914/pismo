@@ -62,8 +62,8 @@ public class TransactionFacadeTest {
     private void assertTransactionAttributes(Transaction transaction) {
         assertEquals(3, transaction.getOperationType().getId());
         assertEquals(42L, transaction.getAccountId());
-        assertEquals(BigDecimal.valueOf(123.45), transaction.getAmount());
-        assertEquals(BigDecimal.valueOf(123.45), transaction.getBalance());
+        assertEquals(BigDecimal.valueOf(-123.45), transaction.getAmount());
+        assertEquals(BigDecimal.valueOf(-123.45), transaction.getBalance());
         assertEquals(LocalDate.now(), transaction.getEventDate());
     }
 
