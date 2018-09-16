@@ -46,7 +46,7 @@ public class AccountsAPITest {
 
     @Test
     public void testSuccessfulUpdateAccount() throws Exception {
-        doNothing().when(accountFacade).updateAccount(eq(123L), any());
+        doReturn(new AccountDTO()).when(accountFacade).updateAccount(eq(123L), any());
 
         mockMvc.perform(patch("/v1/accounts/123")
                 .contentType("application/json")
@@ -54,7 +54,7 @@ public class AccountsAPITest {
                         "\"available_credit_limit\" : { \"amount\": 123.45 }," +
                         "\"available_withdrawal_limit\" : { \"amount\": 432.10 }" +
                         "}"))
-                .andExpect(status().isAccepted());
+                .andExpect(status().isOk());
 
         verify(accountFacade, times(1)).updateAccount(eq(123L), any());
     }

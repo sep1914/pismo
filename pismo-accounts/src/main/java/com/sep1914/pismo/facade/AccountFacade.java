@@ -21,14 +21,16 @@ public class AccountFacade {
     @Autowired
     private AccountOperation accountOperation;
 
-    public void updateAccount(long accountId, AccountDTO accountDTO) {
+    public AccountDTO updateAccount(long accountId, AccountDTO accountDTO) {
         Account newAccount = new Account(ZERO, ZERO);
         newAccount.setId(accountId);
 
         Account account = accountRepository.findById(accountId).orElse(newAccount);
 
         accountOperation.updateLimits(account, accountDTO);
-        accountRepository.save(account);
+        Account savedAccount = accountRepository.save(account);
+
+        return new AccountDTO(savedAccount);
     }
 
     public List<AccountDTO> listAll() {

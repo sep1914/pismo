@@ -22,10 +22,10 @@ public class AccountsAPI {
                               @RequestBody AccountDTO accountDTO) {
         LOGGER.info("Received update account {} request: {}", accountId, accountDTO);
 
-        accountFacade.updateAccount(accountId, accountDTO);
+        AccountDTO updatedAccount = accountFacade.updateAccount(accountId, accountDTO);
 
         LOGGER.info("Account {} updated successfully", accountId);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.ok(updatedAccount);
     }
 
     @GetMapping("/limits")
