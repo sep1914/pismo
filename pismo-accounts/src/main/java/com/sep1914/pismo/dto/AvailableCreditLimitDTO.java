@@ -22,4 +22,10 @@ public class AvailableCreditLimitDTO {
         this.amount = amount;
     }
 
+    @Override
+    public String toString() {
+        return "AvailableCreditLimitDTO{" +
+                "amount=" + amount +
+                '}';
+    }
 }

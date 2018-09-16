@@ -22,4 +22,11 @@ public class AvailableWithdrawalLimitDTO {
         this.amount = amount;
     }
 
+    @Override
+    public String toString() {
+        return "AvailableWithdrawalLimitDTO{" +
+                "amount=" + amount +
+                '}';
+    }
+
 }
