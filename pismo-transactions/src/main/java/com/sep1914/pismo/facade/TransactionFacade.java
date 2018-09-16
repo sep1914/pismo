@@ -2,6 +2,7 @@ package com.sep1914.pismo.facade;
 
 import com.sep1914.pismo.dto.TransactionDTO;
 import com.sep1914.pismo.entity.OperationType;
+import com.sep1914.pismo.entity.OperationTypeEnum;
 import com.sep1914.pismo.entity.Transaction;
 import com.sep1914.pismo.facade.exception.InvalidOperationTypeException;
 import com.sep1914.pismo.persistence.OperationTypeRepository;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+
+import static com.sep1914.pismo.entity.OperationTypeEnum.PAYMENT;
 
 @Component
 public class TransactionFacade {
@@ -26,10 +29,16 @@ public class TransactionFacade {
 
         Transaction transaction = new Transaction();
         transaction.setAccountId(transactionDTO.getAccountId());
-        transaction.setAmount(transactionDTO.getAmount().negate());
-        transaction.setBalance(transactionDTO.getAmount().negate());
         transaction.setOperationType(operationType);
         transaction.setEventDate(LocalDate.now());
+
+        if (OperationTypeEnum.map(transactionDTO.getOperationTypeId()) != PAYMENT) {
+            transaction.setAmount(transactionDTO.getAmount().negate());
+            transaction.setBalance(transactionDTO.getAmount().negate());
+        } else {
+            transaction.setAmount(transactionDTO.getAmount());
+            transaction.setBalance(transactionDTO.getAmount());
+        }
 
         transactionRepository.save(transaction);
     }

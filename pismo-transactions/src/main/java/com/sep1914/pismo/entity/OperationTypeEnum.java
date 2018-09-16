@@ -17,4 +17,14 @@ public enum OperationTypeEnum {
         return operationId;
     }
 
+    public static OperationTypeEnum map(long id) {
+        for (OperationTypeEnum type : values()) {
+            if (type.getOperationId() == id) {
+                return type;
+            }
+        }
+
+        throw new IllegalArgumentException();
+    }
+
 }
